@@ -1,11 +1,10 @@
-import { Editor } from '@/components/editor/Editor'
-import React from 'react'
+import ColloborativeRoom from '@/components/ColloborativeRoom'
 
 const Documents = () => {
   return (
-    <div>
-      <Editor/>
-    </div>
+    <>
+  <ColloborativeRoom/>
+    </>
   )
 }
 

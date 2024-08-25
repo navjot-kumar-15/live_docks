@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils"
 import { Metadata } from "next"
 import Header from "@/components/Header"
 import { dark } from "@clerk/themes"
+import Provider from "./Provider"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -41,18 +42,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             fontSans.variable
           )}
         >
-          <Header>
-            <div className="flex w-fit items-center justify-center gap-2">
-              <p className="document-title">Share</p>
-            </div>
-            <SignedOut>
-              <SignInButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </Header>
+   
+          <Provider>
           {children}
+          </Provider>
         </body>
       </html>
     </ClerkProvider>
