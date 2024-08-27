@@ -19,7 +19,7 @@ declare type SearchParamProps = {
   declare type CreateDocumentParams = {
     userId: string;
     email: string;
-  };
+  };Roo
   
   declare type User = {
     id: string;
@@ -66,8 +66,8 @@ declare type SearchParamProps = {
   declare type CollaborativeRoomProps = {
     roomId: string;
     roomMetadata: RoomMetadata;
-    users: User[];
-    currentUserType: UserType;
+    users?: User[];
+    currentUserType?: UserType;
   };
   
   declare type AddDocumentBtnProps = {
