@@ -8,6 +8,7 @@ import ActiveColloborators from "./ActiveColloborators";
 import Loader from "./Loader";
 import { Input } from "./ui/input";
 import Image from "next/image";
+import { updateDocument } from "@/lib/actions/room.actions";
 
 const ColloborativeRoom = ({
   roomId,
@@ -20,11 +21,17 @@ const ColloborativeRoom = ({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLDivElement>(null);
-  const updateTitleHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const updateTitleHandler = async (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (e.key === "Enter") {
       setLoading(true);
       try {
         if (documentTitle !== roomMetadata.title) {
+          const updateDocs = await updateDocument(roomId, documentTitle);
+          if (updateDocs) {
+            setEditing(false);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -40,6 +47,8 @@ const ColloborativeRoom = ({
         !containerRef.current.contains(e.target as Node)
       ) {
         setEditing(false);
+        console.log(documentTitle);
+        updateDocument(roomId, documentTitle);
       }
     };
 
@@ -47,7 +56,14 @@ const ColloborativeRoom = ({
     return () => {
       document.addEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [roomId, documentTitle]);
+
+  useEffect(() => {
+    if (editing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [editing]);
+
   return (
     <div>
       <RoomProvider id={roomId}>
@@ -63,7 +79,7 @@ const ColloborativeRoom = ({
                     type="text"
                     value={documentTitle}
                     placeholder="Enter title"
-                    ref={inputRef}
+                    // ref={inputRef}s
                     onChange={(e) => setDocumentTitle(e.target.value)}
                     onKeyDown={updateTitleHandler}
                     disabled={!editing}
