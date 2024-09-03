@@ -1,28 +1,45 @@
-import ColloborativeRoom from '@/components/ColloborativeRoom'
-import { getDocument } from '@/lib/actions/room.actions'
-import { currentUser } from '@clerk/nextjs/server'
-import { redirect } from 'next/navigation'
+import ColloborativeRoom from "@/components/ColloborativeRoom";
+import { getDocument } from "@/lib/actions/room.actions";
+import { getClerkUsers } from "@/lib/actions/user.actions";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-const Documents = async({params:{id}}:SearchParamProps) => {
-  const clerkUser = await currentUser()
-  if(!clerkUser) redirect("/sign-in");
+const Documents = async ({ params: { id } }: SearchParamProps) => {
+  const clerkUser = await currentUser();
+  if (!clerkUser) redirect("/sign-in");
   const room = await getDocument({
-    roomId:id,
-    userId:clerkUser.emailAddresses[0].emailAddress
-  })
-  if(!room) redirect("/")
+    roomId: id,
+    userId: clerkUser.emailAddresses[0].emailAddress,
+  });
+  if (!room) redirect("/");
 
-    // TODO: Assess the permission of the user  to access the document
+  const userIds = Object.keys(room.usersAccesses);
+  const users = await getClerkUsers({ userIds });
+  const userData = users.map((user: User) => ({
+    ...user,
+    userType: room.usersAccesses[user.email]?.includes("room:write")
+      ? "editor"
+      : "viewer",
+  }));
+
+  const currentUserType = room.usersAccesses[
+    clerkUser.emailAddresses[0].emailAddress
+  ]?.includes("room:write")
+    ? "editor"
+    : "viewer";
+
   return (
     <>
-    <main className=''>
-  <ColloborativeRoom
+      <main className="">
+        <ColloborativeRoom
           roomId={id}
-          roomMetadata={room.metadata} 
-  />
-    </main>
+          roomMetadata={room.metadata}
+          users={userData}
+          currentUserType={currentUserType}
+        />
+      </main>
     </>
-  )
-}
+  );
+};
 
-export default Documents
+export default Documents;

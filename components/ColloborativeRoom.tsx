@@ -13,8 +13,9 @@ import { updateDocument } from "@/lib/actions/room.actions";
 const ColloborativeRoom = ({
   roomId,
   roomMetadata,
+  users,
+  currentUserType,
 }: CollaborativeRoomProps) => {
-  const currentUserType = "editor";
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [documentTitle, setDocumentTitle] = useState(roomMetadata.title);
@@ -47,7 +48,6 @@ const ColloborativeRoom = ({
         !containerRef.current.contains(e.target as Node)
       ) {
         setEditing(false);
-        console.log(documentTitle);
         updateDocument(roomId, documentTitle);
       }
     };
@@ -113,7 +113,7 @@ const ColloborativeRoom = ({
                 </SignedIn>
               </div>
             </Header>
-            <Editor />
+            <Editor roomId={roomId} currentUserType={currentUserType} />
           </div>
         </ClientSideSuspense>
       </RoomProvider>
