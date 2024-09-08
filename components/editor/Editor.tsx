@@ -24,7 +24,7 @@ export function Editor({
   currentUserType,
 }: {
   roomId: string;
-  currentUserType: UserType;
+  currentUserType?: UserType;
 }) {
   const initialConfig = liveblocksConfig({
     namespace: "Editor",

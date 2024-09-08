@@ -76,7 +76,6 @@ export const getDocuments = async (email:string) => {
     // if (!hasAccess) {
     //   throw new Error("You do not have access to this documents");
     // }
-    console.log(rooms)
     return parseStringify(rooms);
   } catch (error) {
     console.log(`Error happened while getting a rooms ${error}`);

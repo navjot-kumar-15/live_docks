@@ -113,7 +113,7 @@ const ColloborativeRoom = ({
                 </SignedIn>
               </div>
             </Header>
-            <Editor roomId={roomId} currentUserType={currentUserType} />
+            <Editor roomId={roomId}  />
           </div>
         </ClientSideSuspense>
       </RoomProvider>
